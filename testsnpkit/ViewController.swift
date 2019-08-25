@@ -30,6 +30,7 @@ class ViewController: UIViewController {
         tableView.register(UINib(nibName: "CustomCell", bundle: Bundle.main), forCellReuseIdentifier: CustomCell.Identifier)
         customUI()
         addSubviewsToView()
+        setupItemObserver()
         setupCellConfiguration()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -67,6 +68,18 @@ class ViewController: UIViewController {
                         cell.configure(text: text) //4
             }
             .disposed(by: disposeBag) //5
+    }
+    
+    
+    func setupItemObserver() {
+        //1
+        items.asObservable()
+            .subscribe({ //2
+                [unowned self] item in
+                // do something
+                self.title = "\(item.element?.count ?? 0)"
+            })
+            .disposed(by: disposeBag) //3
     }
 
     
